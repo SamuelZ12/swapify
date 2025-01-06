@@ -214,6 +214,28 @@ export function ReadingEntriesList() {
       );
     }
 
+    if (isEditing && field === "type") {
+      return (
+        <TableCell>
+          <Select
+            value={editValue}
+            onValueChange={(value) => {
+              updateCell(entry.id, field, value);
+            }}
+          >
+            <SelectTrigger className="w-[130px]">
+              <SelectValue>{editValue}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Book">Book</SelectItem>
+              <SelectItem value="Article">Article</SelectItem>
+              <SelectItem value="Essay">Essay</SelectItem>
+            </SelectContent>
+          </Select>
+        </TableCell>
+      );
+    }
+
     if (isEditing) {
       return (
         <TableCell>
