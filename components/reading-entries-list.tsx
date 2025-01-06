@@ -49,6 +49,17 @@ type ReadingEntry = {
   notes?: string;
 };
 
+const COLUMN_WIDTHS = {
+  TITLE: "w-[250px]",
+  AUTHOR: "w-[200px]",
+  TYPE: "w-[180px]",
+  STATUS: "w-[180px]",
+  START_DATE: "w-[200px]",
+  COMPLETION_DATE: "w-[200px]",
+  NOTES: "w-[250px]",
+  ACTIONS: "w-[70px]"
+} as const;
+
 export function ReadingEntriesList() {
   const [entries, setEntries] = useState<ReadingEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -158,20 +169,30 @@ export function ReadingEntriesList() {
     const isEditing = editingCell?.id === entry.id && editingCell.field === field;
     const [editValue, setEditValue] = useState(value);
 
+    const getColumnWidth = (field: keyof ReadingEntry) => {
+      switch (field) {
+        case "title": return COLUMN_WIDTHS.TITLE;
+        case "author": return COLUMN_WIDTHS.AUTHOR;
+        case "type": return COLUMN_WIDTHS.TYPE;
+        case "status": return COLUMN_WIDTHS.STATUS;
+        case "start_date": return COLUMN_WIDTHS.START_DATE;
+        case "completion_date": return COLUMN_WIDTHS.COMPLETION_DATE;
+        case "notes": return COLUMN_WIDTHS.NOTES;
+        default: return COLUMN_WIDTHS.TYPE;
+      }
+    };
+
     if (isEditing && (field === "start_date" || field === "completion_date")) {
       return (
-        <TableCell>
+        <TableCell className={`p-0 ${getColumnWidth(field)}`}>
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                variant="outline"
-                className={cn(
-                  "w-[180px] pl-3 text-left font-normal",
-                  !editValue && "text-muted-foreground"
-                )}
+                variant="ghost"
+                className="w-full h-full justify-start font-normal truncate"
               >
                 {editValue || <span>Pick a date</span>}
-                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                <CalendarIcon className="ml-auto h-4 w-4 opacity-50 flex-shrink-0" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -193,43 +214,31 @@ export function ReadingEntriesList() {
       );
     }
 
-    if (isEditing && field === "status") {
+    if (isEditing && (field === "status" || field === "type")) {
       return (
-        <TableCell>
+        <TableCell className={`p-0 ${getColumnWidth(field)}`}>
           <Select
             value={editValue}
             onValueChange={(value) => {
               updateCell(entry.id, field, value);
             }}
           >
-            <SelectTrigger className="w-[130px]">
-              <SelectValue>{editValue}</SelectValue>
+            <SelectTrigger className="w-full h-full border-0 focus:ring-0">
+              <SelectValue className="truncate">{editValue}</SelectValue>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Reading">Reading</SelectItem>
-              <SelectItem value="Completed">Completed</SelectItem>
-            </SelectContent>
-          </Select>
-        </TableCell>
-      );
-    }
-
-    if (isEditing && field === "type") {
-      return (
-        <TableCell>
-          <Select
-            value={editValue}
-            onValueChange={(value) => {
-              updateCell(entry.id, field, value);
-            }}
-          >
-            <SelectTrigger className="w-[130px]">
-              <SelectValue>{editValue}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="Book">Book</SelectItem>
-              <SelectItem value="Article">Article</SelectItem>
-              <SelectItem value="Essay">Essay</SelectItem>
+              {field === "status" ? (
+                <>
+                  <SelectItem value="Reading">Reading</SelectItem>
+                  <SelectItem value="Completed">Completed</SelectItem>
+                </>
+              ) : (
+                <>
+                  <SelectItem value="Book">Book</SelectItem>
+                  <SelectItem value="Article">Article</SelectItem>
+                  <SelectItem value="Essay">Essay</SelectItem>
+                </>
+              )}
             </SelectContent>
           </Select>
         </TableCell>
@@ -238,7 +247,7 @@ export function ReadingEntriesList() {
 
     if (isEditing) {
       return (
-        <TableCell>
+        <TableCell className={`p-0 ${getColumnWidth(field)}`}>
           <Input
             autoFocus
             value={editValue}
@@ -249,6 +258,7 @@ export function ReadingEntriesList() {
                 updateCell(entry.id, field, editValue);
               }
             }}
+            className="h-full w-full border-0 focus-visible:ring-0 rounded-none"
           />
         </TableCell>
       );
@@ -257,7 +267,7 @@ export function ReadingEntriesList() {
     return (
       <TableCell 
         onClick={() => setEditingCell({ id: entry.id, field })}
-        className="cursor-pointer hover:bg-muted/50"
+        className={`cursor-pointer truncate ${getColumnWidth(field)}`}
       >
         {value}
       </TableCell>
@@ -302,14 +312,14 @@ export function ReadingEntriesList() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Author</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Start Date</TableHead>
-              <TableHead>Completion Date</TableHead>
-              <TableHead>Notes</TableHead>
-              <TableHead className="w-[70px]"></TableHead>
+              <TableHead className={COLUMN_WIDTHS.TITLE}>Title</TableHead>
+              <TableHead className={COLUMN_WIDTHS.AUTHOR}>Author</TableHead>
+              <TableHead className={COLUMN_WIDTHS.TYPE}>Type</TableHead>
+              <TableHead className={COLUMN_WIDTHS.STATUS}>Status</TableHead>
+              <TableHead className={COLUMN_WIDTHS.START_DATE}>Start Date</TableHead>
+              <TableHead className={COLUMN_WIDTHS.COMPLETION_DATE}>Completion Date</TableHead>
+              <TableHead className={COLUMN_WIDTHS.NOTES}>Notes</TableHead>
+              <TableHead className={COLUMN_WIDTHS.ACTIONS}></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
