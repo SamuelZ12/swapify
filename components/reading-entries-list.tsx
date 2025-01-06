@@ -137,6 +137,7 @@ export function ReadingEntriesList() {
               <TableHead>Status</TableHead>
               <TableHead>Start Date</TableHead>
               <TableHead>Completion Date</TableHead>
+              <TableHead>Notes</TableHead>
               <TableHead className="w-[70px]"></TableHead>
             </TableRow>
           </TableHeader>
@@ -167,6 +168,9 @@ export function ReadingEntriesList() {
                     {entry.completion_date
                       ? format(new Date(entry.completion_date), "MMM d, yyyy")
                       : "-"}
+                  </TableCell>
+                  <TableCell className="max-w-[200px] truncate">
+                    {entry.notes || "-"}
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
