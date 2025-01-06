@@ -29,6 +29,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
 
 type ReadingEntry = {
   id: string;
@@ -47,6 +55,10 @@ export function ReadingEntriesList() {
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [editingCell, setEditingCell] = useState<{
+    id: string;
+    field: keyof ReadingEntry;
+  } | null>(null);
 
   const supabase = createClient();
 
@@ -81,6 +93,47 @@ export function ReadingEntriesList() {
     }
   }
 
+  async function addNewEntry() {
+    const { data: { user } } = await supabase.auth.getUser();
+    const newEntry = {
+      id: crypto.randomUUID(),
+      title: "",
+      author: "",
+      type: "Book" as const,
+      status: "Reading" as const,
+      start_date: new Date().toISOString(),
+      notes: "",
+      user_id: user?.id
+    };
+
+    const { error } = await supabase
+      .from("reading_entries")
+      .insert(newEntry);
+
+    if (error) {
+      console.error("Error adding new entry:", error);
+      return;
+    }
+
+    await fetchEntries();
+    setEditingCell({ id: newEntry.id, field: 'title' });
+  }
+
+  async function updateCell(id: string, field: keyof ReadingEntry, value: string) {
+    const { error } = await supabase
+      .from("reading_entries")
+      .update({ [field]: value })
+      .match({ id });
+
+    if (error) {
+      console.error("Error updating cell:", error);
+      return;
+    }
+
+    setEditingCell(null);
+    await fetchEntries();
+  }
+
   const filteredEntries = entries.filter((entry) => {
     const matchesSearch =
       entry.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -92,6 +145,102 @@ export function ReadingEntriesList() {
 
     return matchesSearch && matchesType && matchesStatus;
   });
+
+  function EditableCell({ 
+    entry, 
+    field, 
+    value 
+  }: { 
+    entry: ReadingEntry; 
+    field: keyof ReadingEntry; 
+    value: string 
+  }) {
+    const isEditing = editingCell?.id === entry.id && editingCell.field === field;
+    const [editValue, setEditValue] = useState(value);
+
+    if (isEditing && (field === "start_date" || field === "completion_date")) {
+      return (
+        <TableCell>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "w-[180px] pl-3 text-left font-normal",
+                  !editValue && "text-muted-foreground"
+                )}
+              >
+                {editValue || <span>Pick a date</span>}
+                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                selected={new Date(editValue)}
+                onSelect={(date) => {
+                  if (date) {
+                    const formattedDate = format(date, "MMM d, yyyy");
+                    setEditValue(formattedDate);
+                    updateCell(entry.id, field, date.toISOString());
+                  }
+                }}
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </TableCell>
+      );
+    }
+
+    if (isEditing && field === "status") {
+      return (
+        <TableCell>
+          <Select
+            value={editValue}
+            onValueChange={(value) => {
+              updateCell(entry.id, field, value);
+            }}
+          >
+            <SelectTrigger className="w-[130px]">
+              <SelectValue>{editValue}</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Reading">Reading</SelectItem>
+              <SelectItem value="Completed">Completed</SelectItem>
+            </SelectContent>
+          </Select>
+        </TableCell>
+      );
+    }
+
+    if (isEditing) {
+      return (
+        <TableCell>
+          <Input
+            autoFocus
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onBlur={() => updateCell(entry.id, field, editValue)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                updateCell(entry.id, field, editValue);
+              }
+            }}
+          />
+        </TableCell>
+      );
+    }
+
+    return (
+      <TableCell 
+        onClick={() => setEditingCell({ id: entry.id, field })}
+        className="cursor-pointer hover:bg-muted/50"
+      >
+        {value}
+      </TableCell>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -157,21 +306,28 @@ export function ReadingEntriesList() {
             ) : (
               filteredEntries.map((entry) => (
                 <TableRow key={entry.id}>
-                  <TableCell className="font-medium">{entry.title}</TableCell>
-                  <TableCell>{entry.author}</TableCell>
-                  <TableCell>{entry.type}</TableCell>
-                  <TableCell>{entry.status}</TableCell>
-                  <TableCell>
-                    {format(new Date(entry.start_date), "MMM d, yyyy")}
-                  </TableCell>
-                  <TableCell>
-                    {entry.completion_date
+                  <EditableCell entry={entry} field="title" value={entry.title} />
+                  <EditableCell entry={entry} field="author" value={entry.author} />
+                  <EditableCell entry={entry} field="type" value={entry.type} />
+                  <EditableCell entry={entry} field="status" value={entry.status} />
+                  <EditableCell 
+                    entry={entry} 
+                    field="start_date" 
+                    value={format(new Date(entry.start_date), "MMM d, yyyy")} 
+                  />
+                  <EditableCell 
+                    entry={entry} 
+                    field="completion_date" 
+                    value={entry.completion_date 
                       ? format(new Date(entry.completion_date), "MMM d, yyyy")
-                      : "-"}
-                  </TableCell>
-                  <TableCell className="max-w-[200px] truncate">
-                    {entry.notes || "-"}
-                  </TableCell>
+                      : "-"
+                    } 
+                  />
+                  <EditableCell 
+                    entry={entry} 
+                    field="notes" 
+                    value={entry.notes || "-"} 
+                  />
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -193,6 +349,17 @@ export function ReadingEntriesList() {
                 </TableRow>
               ))
             )}
+            <TableRow>
+              <TableCell colSpan={8}>
+                <Button
+                  onClick={addNewEntry}
+                  variant="ghost"
+                  className="w-full h-8 hover:bg-muted/50"
+                >
+                  + Add new entry
+                </Button>
+              </TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </div>
