@@ -8,8 +8,7 @@
 
 <p align="center">
   <a href="#features"><strong>Features</strong></a> ·
-  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
-  <a href="#local-development"><strong>Local Development</strong></a>
+  <a href="#tech-stack"><strong>Tech Stack</strong></a>
 </p>
 <br/>
 
@@ -39,5 +38,3 @@
 - **Components**: shadcn/ui
 - **Libraries**: React
 - **Deployment**: Vercel
-
-## Local Development
