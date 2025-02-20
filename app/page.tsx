@@ -1,92 +1,116 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BookOpen, Filter, Search, Clock } from "lucide-react";
+import { ArrowRight, Laptop, Book, Shirt, Sofa, Trophy, Car } from "lucide-react";
 import Link from "next/link";
-
+import Image from "next/image";
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center">
       {/* Hero Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+      <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-[#0A1A2F] text-white">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                Track Your Reading Journey
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+            <div className="flex flex-col space-y-4">
+              <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+                Shop without spending money
               </h1>
-              <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                A minimalist reading log to help you track, organize, and reflect on your reading habits.
+              <p className="max-w-[600px] text-gray-300 md:text-xl dark:text-gray-400">
+                Meet people on Swapify to trade for everything from clothing and furniture to houseplants and art
               </p>
+              <div className="space-x-4">
+                <Button asChild size="lg" className="bg-white text-[#0A1A2F] hover:bg-gray-100">
+                  <Link href="/sign-up">
+                    Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </Button>
+              </div>
             </div>
-            <div className="space-x-4">
-              <Button asChild size="lg">
-                <Link href="/sign-up">
-                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
+            <div className="hidden lg:block">
+              <Image
+                src="/barter-illustration.webp"
+                alt="People trading items illustration"
+                width={600}
+                height={400}
+                className="w-full h-auto"
+                priority
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+      {/* Categories Section */}
+      <section className="w-full py-12 md:py-24">
         <div className="container px-4 md:px-6">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="p-4 bg-primary/10 rounded-full">
-                <BookOpen className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold">Easy Logging</h3>
-              <p className="text-center text-gray-500 dark:text-gray-400">
-                Quickly log your reading with title, author, type, and progress tracking.
-              </p>
-            </div>
-            <div className="flex flex-col items-center space-y-4">
-              <div className="p-4 bg-primary/10 rounded-full">
-                <Filter className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold">Smart Organization</h3>
-              <p className="text-center text-gray-500 dark:text-gray-400">
-                Filter and organize your readings by type, status, and completion date.
-              </p>
-            </div>
-            <div className="flex flex-col items-center space-y-4">
-              <div className="p-4 bg-primary/10 rounded-full">
-                <Search className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="text-xl font-bold">Quick Search</h3>
-              <p className="text-center text-gray-500 dark:text-gray-400">
-                Find any book or article in your reading history instantly.
-              </p>
-            </div>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
+              Popular Categories
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+            <CategoryCard icon={<Laptop className="h-8 w-8" />} title="Electronics" />
+            <CategoryCard icon={<Book className="h-8 w-8" />} title="Books" />
+            <CategoryCard icon={<Shirt className="h-8 w-8" />} title="Clothing" />
+            <CategoryCard icon={<Sofa className="h-8 w-8" />} title="Furniture" />
+            <CategoryCard icon={<Trophy className="h-8 w-8" />} title="Sports" />
+            <CategoryCard icon={<Car className="h-8 w-8" />} title="Vehicles" />
           </div>
         </div>
       </section>
 
-      {/* Preview Section */}
-      <section className="w-full py-12 md:py-24 lg:py-32">
+      {/* How It Works Section */}
+      <section className="w-full py-12 md:py-24 bg-gray-50">
         <div className="container px-4 md:px-6">
-          <div className="flex flex-col items-center space-y-4 text-center">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Simple. Powerful. Beautiful.
-              </h2>
-              <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                Experience a clean, distraction-free interface designed for readers.
-              </p>
-            </div>
-            {/* Mock UI Preview */}
-            <div className="w-full max-w-4xl mt-8 rounded-lg border bg-background p-4 shadow-lg">
-              <div className="space-y-8">
-                <div className="h-[300px] rounded-lg bg-muted/60 flex items-center justify-center">
-                  <p className="text-sm text-gray-500">App interface preview</p>
-                </div>
-              </div>
-            </div>
+          <div className="text-center mb-12">
+            <span className="text-sm font-medium text-primary mb-2 block">HOW IT WORKS</span>
+            <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
+              Working with Swapify is simple
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <StepCard 
+              number="1" 
+              title="Sign Up" 
+              description="Create your free account and start exploring items" 
+            />
+            <StepCard 
+              number="2" 
+              title="Upload Items" 
+              description="Click a picture of your item and upload it" 
+            />
+            <StepCard 
+              number="3" 
+              title="Trade It" 
+              description="Connect with other people and start trading your items!" 
+            />
           </div>
         </div>
       </section>
+    </div>
+  );
+}
+
+function CategoryCard({ icon, title }: { icon: React.ReactNode; title: string }) {
+  return (
+    <Link href={`/items/${title.toLowerCase()}`} className="group">
+      <div className="flex flex-col items-center p-6 space-y-4 rounded-lg border bg-card transition-colors hover:bg-accent hover:text-accent-foreground">
+        <div className="p-2 bg-primary/10 rounded-full group-hover:bg-primary/20">
+          {icon}
+        </div>
+        <h3 className="font-medium text-sm">{title}</h3>
+      </div>
+    </Link>
+  );
+}
+
+function StepCard({ number, title, description }: { number: string; title: string; description: string }) {
+  return (
+    <div className="flex flex-col items-center text-center space-y-4">
+      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+        <span className="text-xl font-bold">{number}</span>
+      </div>
+      <h3 className="text-xl font-bold">{title}</h3>
+      <p className="text-muted-foreground">{description}</p>
     </div>
   );
 }
