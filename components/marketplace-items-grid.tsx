@@ -66,7 +66,7 @@ export function MarketplaceItemsGrid() {
               Post Item
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Post a New Item</DialogTitle>
               <DialogDescription>
