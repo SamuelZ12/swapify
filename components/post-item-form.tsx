@@ -37,15 +37,25 @@ const formSchema = z.object({
 
 type PostItemFormProps = {
   onSuccess: () => void;
+  initialData?: {
+    id: string;
+    title: string;
+    description: string;
+    category: string;
+    condition: string;
+    location: string;
+    contact: string;
+    image_url: string;
+  };
 };
 
-export function PostItemForm({ onSuccess }: PostItemFormProps) {
+export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
   const [loading, setLoading] = useState(false);
   const supabase = createClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       title: "",
       description: "",
       category: "Electronics",
@@ -65,20 +75,34 @@ export function PostItemForm({ onSuccess }: PostItemFormProps) {
         throw new Error("User not authenticated");
       }
 
-      const { error } = await supabase.from("marketplace_items").insert({
-        ...values,
-        user_id: user.id,
-        created_at: new Date().toISOString(),
-      });
+      if (initialData) {
+        // Update existing item
+        const { error } = await supabase
+          .from("marketplace_items")
+          .update({
+            ...values,
+            user_id: user.id,
+          })
+          .eq('id', initialData.id);
 
-      if (error) {
-        throw error;
+        if (error) throw error;
+      } else {
+        // Create new item
+        const { error } = await supabase
+          .from("marketplace_items")
+          .insert({
+            ...values,
+            user_id: user.id,
+            created_at: new Date().toISOString(),
+          });
+
+        if (error) throw error;
       }
 
       form.reset();
       onSuccess();
     } catch (error: any) {
-      console.error("Error posting item:", error.message);
+      console.error("Error posting/updating item:", error.message);
       alert(error.message);
     } finally {
       setLoading(false);
@@ -223,7 +247,7 @@ export function PostItemForm({ onSuccess }: PostItemFormProps) {
         />
 
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Posting..." : "Post Item"}
+          {loading ? (initialData ? "Updating..." : "Posting...") : (initialData ? "Update Item" : "Post Item")}
         </Button>
       </form>
     </Form>

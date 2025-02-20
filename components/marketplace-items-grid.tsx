@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Plus, MessageCircle } from "lucide-react";
+import { Plus, MessageCircle, Pencil } from "lucide-react";
 import Image from "next/image";
 import {
   Dialog,
@@ -31,11 +31,21 @@ type MarketplaceItem = {
 export function MarketplaceItemsGrid() {
   const [items, setItems] = useState<MarketplaceItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<MarketplaceItem | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
     fetchItems();
+    getCurrentUser();
   }, []);
+
+  async function getCurrentUser() {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setCurrentUserId(user.id);
+    }
+  }
 
   async function fetchItems() {
     const { data, error } = await supabase
@@ -96,6 +106,29 @@ export function MarketplaceItemsGrid() {
                   fill
                   className="object-cover"
                 />
+                {item.user_id === currentUserId && (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="secondary"
+                        size="icon"
+                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => setSelectedItem(item)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle>Edit Item</DialogTitle>
+                        <DialogDescription>
+                          Make changes to your item listing
+                        </DialogDescription>
+                      </DialogHeader>
+                      <PostItemForm onSuccess={fetchItems} initialData={item} />
+                    </DialogContent>
+                  </Dialog>
+                )}
               </div>
               <div className="p-4 space-y-2">
                 <h3 className="font-semibold text-lg truncate">{item.title}</h3>
