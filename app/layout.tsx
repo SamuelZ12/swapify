@@ -1,5 +1,3 @@
-import DeployButton from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
 import HeaderAuth from "@/components/header-auth";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
@@ -47,7 +45,7 @@ export default function RootLayout({
                     </Link>
                   </div>
                   <div className="flex items-center gap-4">
-                    {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+                    <HeaderAuth />
                   </div>
                 </div>
               </nav>
