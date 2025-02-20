@@ -41,8 +41,8 @@ type PostItemFormProps = {
     id: string;
     title: string;
     description: string;
-    category: string;
-    condition: string;
+    category: "Electronics" | "Books" | "Clothing" | "Furniture" | "Sports" | "Vehicles" | "Other";
+    condition: "New" | "Like New" | "Good" | "Fair";
     location: string;
     contact: string;
     image_url: string;
