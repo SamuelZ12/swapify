@@ -28,9 +28,7 @@ import { ImageUpload } from "@/components/image-upload";
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  category: z.enum(["Electronics", "Books", "Clothing", "Furniture", "Sports", "Vehicles", "Other"]),
-  condition: z.enum(["New", "Like New", "Good", "Fair"]),
-  location: z.string().min(1, "Location is required"),
+  category: z.enum(["Item", "Skill", "Other"]),
   contact: z.string().min(1, "Contact information is required"),
   image_url: z.string().min(1, "Image is required"),
 });
@@ -41,9 +39,7 @@ type PostItemFormProps = {
     id: string;
     title: string;
     description: string;
-    category: "Electronics" | "Books" | "Clothing" | "Furniture" | "Sports" | "Vehicles" | "Other";
-    condition: "New" | "Like New" | "Good" | "Fair";
-    location: string;
+    category: "Item" | "Skill" | "Other";
     contact: string;
     image_url: string;
   };
@@ -58,9 +54,7 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
     defaultValues: initialData || {
       title: "",
       description: "",
-      category: "Electronics",
-      condition: "New",
-      location: "",
+      category: "Item",
       contact: "",
       image_url: "",
     },
@@ -117,7 +111,7 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
           name="image_url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Item Image</FormLabel>
+              <FormLabel>Image</FormLabel>
               <FormControl>
                 <ImageUpload
                   value={field.value}
@@ -138,7 +132,7 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Item name" {...field} disabled={loading} />
+                  <Input placeholder="What are you offering?" {...field} disabled={loading} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -150,20 +144,16 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Category</FormLabel>
+                <FormLabel>Type</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={loading}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Electronics">Electronics</SelectItem>
-                    <SelectItem value="Books">Books</SelectItem>
-                    <SelectItem value="Clothing">Clothing</SelectItem>
-                    <SelectItem value="Furniture">Furniture</SelectItem>
-                    <SelectItem value="Sports">Sports</SelectItem>
-                    <SelectItem value="Vehicles">Vehicles</SelectItem>
+                    <SelectItem value="Item">Item</SelectItem>
+                    <SelectItem value="Skill">Skill</SelectItem>
                     <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
@@ -181,7 +171,7 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Describe your item..."
+                  placeholder={field.value === "Skill" ? "Describe the skill you can teach..." : "Describe what you're offering..."}
                   className="resize-none"
                   {...field}
                   disabled={loading}
@@ -192,39 +182,15 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
           )}
         />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <FormField
             control={form.control}
-            name="condition"
+            name="contact"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Condition</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={loading}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select condition" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="New">New</SelectItem>
-                    <SelectItem value="Like New">Like New</SelectItem>
-                    <SelectItem value="Good">Good</SelectItem>
-                    <SelectItem value="Fair">Fair</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Location</FormLabel>
+                <FormLabel>Contact Information</FormLabel>
                 <FormControl>
-                  <Input placeholder="Your location" {...field} disabled={loading} />
+                  <Input placeholder="How can people reach you?" {...field} disabled={loading} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -232,22 +198,8 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
           />
         </div>
 
-        <FormField
-          control={form.control}
-          name="contact"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Contact Information</FormLabel>
-              <FormControl>
-                <Input placeholder="How to reach you" {...field} disabled={loading} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? (initialData ? "Updating..." : "Posting...") : (initialData ? "Update Item" : "Post Item")}
+          {loading ? (initialData ? "Updating..." : "Posting...") : (initialData ? "Update Listing" : "Post Listing")}
         </Button>
       </form>
     </Form>

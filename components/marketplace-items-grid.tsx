@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Plus, MessageCircle, Pencil, Mail, MapPin, Phone } from "lucide-react";
+import { Plus, MessageCircle, Pencil, Mail, MapPin, Phone, Trash2 } from "lucide-react";
 import Image from "next/image";
 import {
   Dialog,
@@ -20,9 +20,7 @@ type MarketplaceItem = {
   id: string;
   title: string;
   description: string;
-  category: "Electronics" | "Books" | "Clothing" | "Furniture" | "Sports" | "Vehicles" | "Other";
-  condition: "New" | "Like New" | "Good" | "Fair";
-  location: string;
+  category: "Item" | "Skill" | "Other";
   contact: string;
   image_url: string;
   user_id: string;
@@ -60,6 +58,25 @@ export function MarketplaceItemsGrid() {
       setItems(data || []);
     }
     setLoading(false);
+  }
+
+  async function deleteItem(id: string) {
+    try {
+      const { error } = await supabase
+        .from("marketplace_items")
+        .delete()
+        .match({ id });
+
+      if (error) {
+        console.error("Error deleting item:", error);
+        alert("Error deleting item. Please try again.");
+      } else {
+        fetchItems();
+      }
+    } catch (error: any) {
+      console.error("Error deleting item:", error);
+      alert("Error deleting item. Please try again.");
+    }
   }
 
   if (loading) {
@@ -126,7 +143,21 @@ export function MarketplaceItemsGrid() {
                           Make changes to your item listing
                         </DialogDescription>
                       </DialogHeader>
-                      <PostItemForm onSuccess={fetchItems} initialData={item} />
+                      <div className="space-y-4">
+                        <PostItemForm onSuccess={fetchItems} initialData={item} />
+                        <Button
+                          variant="destructive"
+                          className="w-full mt-2"
+                          onClick={() => {
+                            if (window.confirm("Are you sure you want to delete this item? This action cannot be undone.")) {
+                              deleteItem(item.id);
+                            }
+                          }}
+                        >
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Delete Item
+                        </Button>
+                      </div>
                     </DialogContent>
                   </Dialog>
                 )}
@@ -136,11 +167,6 @@ export function MarketplaceItemsGrid() {
                 <p className="text-sm text-muted-foreground line-clamp-2">
                   {item.description}
                 </p>
-                <div className="flex items-center gap-2 text-sm">
-                  <span className="font-medium">{item.condition}</span>
-                  <span className="text-muted-foreground">•</span>
-                  <span className="text-muted-foreground">{item.location}</span>
-                </div>
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button variant="secondary" className="w-full mt-4" size="sm">
@@ -157,14 +183,6 @@ export function MarketplaceItemsGrid() {
                     </DialogHeader>
                     <div className="space-y-6 py-4">
                       <div className="space-y-4">
-                        <div className="flex items-start space-x-4">
-                          <MapPin className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
-                          <div className="space-y-1">
-                            <p className="text-sm font-medium leading-none">Location</p>
-                            <p className="text-sm text-muted-foreground">{item.location}</p>
-                          </div>
-                        </div>
-                        <Separator />
                         <div className="flex items-start space-x-4">
                           <Phone className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
                           <div className="space-y-1">
