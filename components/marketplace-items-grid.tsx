@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Plus, MessageCircle, Pencil } from "lucide-react";
+import { Plus, MessageCircle, Pencil, Mail, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
 import {
   Dialog,
@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { PostItemForm } from "@/components/post-item-form";
+import { Separator } from "@/components/ui/separator";
 
 type MarketplaceItem = {
   id: string;
@@ -140,10 +141,46 @@ export function MarketplaceItemsGrid() {
                   <span className="text-muted-foreground">•</span>
                   <span className="text-muted-foreground">{item.location}</span>
                 </div>
-                <Button variant="secondary" className="w-full mt-4" size="sm">
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  Contact Trader
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="secondary" className="w-full mt-4" size="sm">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Contact Trader
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Contact Information</DialogTitle>
+                      <DialogDescription>
+                        Get in touch about "{item.title}"
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-6 py-4">
+                      <div className="space-y-4">
+                        <div className="flex items-start space-x-4">
+                          <MapPin className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                          <div className="space-y-1">
+                            <p className="text-sm font-medium leading-none">Location</p>
+                            <p className="text-sm text-muted-foreground">{item.location}</p>
+                          </div>
+                        </div>
+                        <Separator />
+                        <div className="flex items-start space-x-4">
+                          <Phone className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                          <div className="space-y-1">
+                            <p className="text-sm font-medium leading-none">Contact Details</p>
+                            <p className="text-sm text-muted-foreground">{item.contact}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-muted/50 rounded-lg p-4">
+                        <p className="text-sm text-muted-foreground">
+                          When contacting the trader, please mention that you found their item on our marketplace. Be respectful and trade safely.
+                        </p>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           ))
