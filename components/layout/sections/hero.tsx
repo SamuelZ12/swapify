@@ -6,9 +6,20 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 export const HeroSection = () => {
   const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const gradientClass = mounted && theme === "dark" 
+    ? "from-[#E2725B] to-primary"
+    : "from-[#F1B4A9] to-primary";
+
   return (
     <section className="container w-full">
       <div className="grid place-items-center lg:max-w-screen-xl gap-8 mx-auto py-20 md:py-32">
@@ -26,9 +37,7 @@ export const HeroSection = () => {
               <span
                 className={cn(
                   "text-transparent px-2 bg-gradient-to-r bg-clip-text",
-                  theme === "dark"
-                    ? "from-[#E2725B] to-primary"
-                    : "from-[#F1B4A9] to-primary"
+                  gradientClass
                 )}
               >
                 Not Money
@@ -70,7 +79,7 @@ export const HeroSection = () => {
               width={1200}
               height={1200}
               className="w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none flex items-center border border-t-2 border-secondary border-t-primary/30"
-              src="/hero-image-light.jpeg"
+              src="/hero-image-light.png"
               alt="dashboard"
               priority
             />
@@ -79,7 +88,7 @@ export const HeroSection = () => {
                 width={1200}
                 height={1200}
                 className="w-full md:w-[1200px] mx-auto rounded-lg absolute inset-0 transition-opacity duration-200"
-                src="/hero-image-dark.jpeg"
+                src="/hero-image-dark.png"
                 alt="dashboard"
                 priority
               />
