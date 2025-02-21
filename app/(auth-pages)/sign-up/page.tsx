@@ -13,40 +13,40 @@ export default async function Signup(props: {
   const searchParams = await props.searchParams;
   if ("message" in searchParams) {
     return (
-      <div className="w-full flex-1 flex items-center h-screen sm:max-w-md justify-center gap-2 p-4">
+      <div className="w-full max-w-[400px] mx-auto">
         <FormMessage message={searchParams} />
       </div>
     );
   }
 
   return (
-    <div className="flex-1 flex flex-col justify-center items-center min-h-[80vh]">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-          <CardDescription>
+    <div className="w-full max-w-[400px] mx-auto">
+      <Card className="border-none shadow-lg">
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-3xl font-semibold tracking-tight">Create an account</CardTitle>
+          <CardDescription className="text-base">
             Already have an account?{" "}
-            <Link className="text-primary hover:underline font-medium" href="/sign-in">
+            <Link className="text-primary hover:underline font-medium transition-colors" href="/sign-in">
               Sign in
             </Link>
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
+        <CardContent className="pb-8">
+          <div className="grid gap-6">
             <GoogleSignInButton />
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
+                <span className="bg-card px-2 text-muted-foreground">
                   Or continue with
                 </span>
               </div>
             </div>
-            <form className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+            <form className="grid gap-5">
+              <div className="grid gap-3">
+                <Label className="text-base" htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   name="email"
@@ -56,10 +56,11 @@ export default async function Signup(props: {
                   autoComplete="email"
                   autoCorrect="off"
                   required
+                  className="h-11"
                 />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
+              <div className="grid gap-3">
+                <Label className="text-base" htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   name="password"
@@ -68,10 +69,11 @@ export default async function Signup(props: {
                   autoComplete="new-password"
                   minLength={6}
                   required
+                  className="h-11"
                 />
               </div>
               <SubmitButton
-                className="w-full"
+                className="w-full h-11 text-base"
                 pendingText="Creating account..."
                 formAction={signUpAction}
               >

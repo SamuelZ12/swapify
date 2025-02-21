@@ -11,33 +11,33 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
   return (
-    <div className="flex-1 flex flex-col justify-center items-center min-h-[80vh]">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-          <CardDescription>
+    <div className="w-full max-w-[400px] mx-auto">
+      <Card className="border-none shadow-lg">
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-3xl font-semibold tracking-tight">Welcome back</CardTitle>
+          <CardDescription className="text-base">
             Don't have an account?{" "}
-            <Link className="text-primary hover:underline font-medium" href="/sign-up">
+            <Link className="text-primary hover:underline font-medium transition-colors" href="/sign-up">
               Sign up
             </Link>
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
+        <CardContent className="pb-8">
+          <div className="grid gap-6">
             <GoogleSignInButton />
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
+                <span className="bg-card px-2 text-muted-foreground">
                   Or continue with
                 </span>
               </div>
             </div>
-            <form className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+            <form className="grid gap-5">
+              <div className="grid gap-3">
+                <Label className="text-base" htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   name="email"
@@ -47,14 +47,15 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
                   autoComplete="email"
                   autoCorrect="off"
                   required
+                  className="h-11"
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="grid gap-3">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
+                  <Label className="text-base" htmlFor="password">Password</Label>
                   <Link
                     href="/forgot-password"
-                    className="text-sm text-muted-foreground hover:text-primary"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     Forgot password?
                   </Link>
@@ -66,10 +67,11 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
                   autoCapitalize="none"
                   autoComplete="current-password"
                   required
+                  className="h-11"
                 />
               </div>
               <SubmitButton
-                className="w-full"
+                className="w-full h-11 text-base"
                 pendingText="Signing in..."
                 formAction={signInAction}
               >
