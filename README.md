@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.0-38B2AC)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-Database-green)](https://supabase.com/)
@@ -16,7 +16,6 @@
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
-- [Development](#development)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -63,7 +62,7 @@ Swapify is a peer-to-peer platform designed for University of Waterloo students 
 ## 🛠 Tech Stack
 
 ### Frontend
-- **Next.js 14** - React framework with App Router
+- **Next.js 15** - React framework with App Router
 - **React** - UI library
 - **TypeScript** - Type safety
 - **Tailwind CSS** - Styling
@@ -95,10 +94,7 @@ cd swapify
 pnpm install
 ```
 
-3. Set up environment variables
-```bash
-cp .env.example .env.local
-```
+3. Create a `.env.local` file in the root directory with your environment variables
 
 4. Start the development server
 ```bash
@@ -107,36 +103,17 @@ pnpm dev
 
 ## 🔐 Environment Variables
 
-Create a `.env.local` file with the following variables:
+Create a `.env.local` file in the root directory with the following variables:
 ```bash
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
-
-# Google Cloud
-GOOGLE_CLIENT_ID=your_client_id
-GOOGLE_CLIENT_SECRET=your_client_secret
-
-# General
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+# Supabase Configuration
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-## 💻 Development
-
-### Code Style
-- Follow TypeScript best practices
-- Use functional components
-- Implement responsive design with Tailwind
-- Write meaningful commit messages
-
-### Commands
-```bash
-pnpm dev        # Start development server
-pnpm build      # Build for production
-pnpm start      # Start production server
-pnpm lint       # Run ESLint
-pnpm test       # Run tests
-```
+Note: You'll need to:
+1. Create a Supabase project at [supabase.com](https://supabase.com)
+2. Copy your project URL and anon key from the project settings
+3. Replace the placeholder values in `.env.local` with your actual credentials
 
 ## 🤝 Contributing
 
