@@ -5,18 +5,9 @@ import { ArrowRight } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
 
 export const HeroSection = () => {
   const { theme } = useTheme();
-
-  useEffect(() => {
-    const img = document.querySelector('img[data-light-src]') as HTMLImageElement;
-    if (img) {
-      img.src = theme === 'light' ? img.dataset.lightSrc! : img.dataset.darkSrc!;
-    }
-  }, [theme]);
-
   return (
     <section className="container w-full">
       <div className="grid place-items-center lg:max-w-screen-xl gap-8 mx-auto py-20 md:py-32">
@@ -69,10 +60,12 @@ export const HeroSection = () => {
           <Image
             width={1200}
             height={1200}
-            className="w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none flex items-center border border-t-2 border-secondary border-t-primary/30"
-            src={"/hero-image-dark.jpeg"}
-            data-light-src="/hero-image-light.jpeg"
-            data-dark-src="/hero-image-dark.jpeg"
+            className="w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none flex items-center border border-t-2 border-secondary  border-t-primary/30"
+            src={
+              theme === "light"
+                ? "/hero-image-light.jpeg"
+                : "/hero-image-dark.jpeg"
+            }
             alt="dashboard"
           />
 
