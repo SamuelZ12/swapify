@@ -62,11 +62,6 @@ export const Navbar = () => {
       </Link>
       {/* <!-- Mobile --> */}
       <div className="flex items-center gap-2 lg:hidden">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/sign-in" className="text-sm font-medium">
-            Sign in
-          </Link>
-        </Button>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Menu
