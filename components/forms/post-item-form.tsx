@@ -12,6 +12,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -24,29 +25,32 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/utils/supabase/client";
 import { ImageUpload } from "@/components/forms/image-upload";
+import { Badge } from "@/components/ui/badge";
+import { X } from "lucide-react";
 
 const formSchema = z.object({
+  id: z.string().optional(),
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  category: z.enum(["Item", "Skill", "Other"]),
+  category: z.enum(["Academic", "Creative", "Fitness", "Other"]),
+  skillTags: z.array(z.string()).min(1, "At least one skill tag is required"),
+  skillLevel: z.enum(["Beginner", "Intermediate", "Advanced"]),
+  availability: z.string().min(1, "Availability is required"),
   contact: z.string().min(1, "Contact information is required"),
   image_url: z.string().min(1, "Image is required"),
+  location: z.string().min(1, "Location is required"),
+  tradePreferences: z.array(z.string()).optional(),
 });
 
 type PostItemFormProps = {
   onSuccess: () => void;
-  initialData?: {
-    id: string;
-    title: string;
-    description: string;
-    category: "Item" | "Skill" | "Other";
-    contact: string;
-    image_url: string;
-  };
+  initialData?: z.infer<typeof formSchema>;
 };
 
 export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
   const [loading, setLoading] = useState(false);
+  const [newSkillTag, setNewSkillTag] = useState("");
+  const [newTradePreference, setNewTradePreference] = useState("");
   const supabase = createClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,11 +58,54 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
     defaultValues: initialData || {
       title: "",
       description: "",
-      category: "Item",
+      category: "Academic",
+      skillTags: [],
+      skillLevel: "Beginner",
+      availability: "",
       contact: "",
       image_url: "",
+      location: "",
+      tradePreferences: [],
     },
   });
+
+  const addSkillTag = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && newSkillTag.trim()) {
+      e.preventDefault();
+      const currentTags = form.getValues("skillTags");
+      if (!currentTags.includes(newSkillTag.trim())) {
+        form.setValue("skillTags", [...currentTags, newSkillTag.trim()]);
+      }
+      setNewSkillTag("");
+    }
+  };
+
+  const removeSkillTag = (tagToRemove: string) => {
+    const currentTags = form.getValues("skillTags");
+    form.setValue(
+      "skillTags",
+      currentTags.filter((tag) => tag !== tagToRemove)
+    );
+  };
+
+  const addTradePreference = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && newTradePreference.trim()) {
+      e.preventDefault();
+      const currentPrefs = form.getValues("tradePreferences") || [];
+      if (!currentPrefs.includes(newTradePreference.trim())) {
+        form.setValue("tradePreferences", [...currentPrefs, newTradePreference.trim()]);
+      }
+      setNewTradePreference("");
+    }
+  };
+
+  const removeTradePreference = (prefToRemove: string) => {
+    const currentPrefs = form.getValues("tradePreferences") || [];
+    form.setValue(
+      "tradePreferences",
+      currentPrefs.filter((pref) => pref !== prefToRemove)
+    );
+  };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -70,7 +117,6 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
       }
 
       if (initialData) {
-        // Update existing item
         const { error } = await supabase
           .from("marketplace_items")
           .update({
@@ -81,13 +127,13 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
 
         if (error) throw error;
       } else {
-        // Create new item
         const { error } = await supabase
           .from("marketplace_items")
           .insert({
             ...values,
             user_id: user.id,
             created_at: new Date().toISOString(),
+            rating: 0,
           });
 
         if (error) throw error;
@@ -96,7 +142,7 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
       form.reset();
       onSuccess();
     } catch (error: any) {
-      console.error("Error posting/updating item:", error.message);
+      console.error("Error posting/updating trade:", error.message);
       alert(error.message);
     } finally {
       setLoading(false);
@@ -119,6 +165,9 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
                   disabled={loading}
                 />
               </FormControl>
+              <FormDescription>
+                Add a photo that represents your skill or trade offering
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -132,7 +181,11 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="What are you offering?" {...field} disabled={loading} />
+                  <Input 
+                    placeholder="What skill are you offering?" 
+                    {...field} 
+                    disabled={loading} 
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -144,16 +197,17 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
             name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Type</FormLabel>
+                <FormLabel>Category</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value} disabled={loading}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
+                      <SelectValue placeholder="Select category" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Item">Item</SelectItem>
-                    <SelectItem value="Skill">Skill</SelectItem>
+                    <SelectItem value="Academic">Academic</SelectItem>
+                    <SelectItem value="Creative">Creative</SelectItem>
+                    <SelectItem value="Fitness">Fitness</SelectItem>
                     <SelectItem value="Other">Other</SelectItem>
                   </SelectContent>
                 </Select>
@@ -171,7 +225,7 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
               <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder={field.value === "Skill" ? "Describe the skill you can teach..." : "Describe what you're offering..."}
+                  placeholder="Describe your skill and what you can teach others..."
                   className="resize-none"
                   {...field}
                   disabled={loading}
@@ -182,7 +236,146 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
           )}
         />
 
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="skillLevel"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Skill Level</FormLabel>
+                <Select onValueChange={field.onChange} defaultValue={field.value} disabled={loading}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select skill level" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Beginner">Beginner</SelectItem>
+                    <SelectItem value="Intermediate">Intermediate</SelectItem>
+                    <SelectItem value="Advanced">Advanced</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="availability"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Availability</FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="When are you available?" 
+                    {...field} 
+                    disabled={loading} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <FormField
+          control={form.control}
+          name="skillTags"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Skill Tags</FormLabel>
+              <FormControl>
+                <div className="space-y-2">
+                  <Input
+                    placeholder="Add skill tags (press Enter)"
+                    value={newSkillTag}
+                    onChange={(e) => setNewSkillTag(e.target.value)}
+                    onKeyDown={addSkillTag}
+                    disabled={loading}
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    {field.value.map((tag) => (
+                      <Badge key={tag} variant="secondary" className="gap-1">
+                        {tag}
+                        <button
+                          type="button"
+                          onClick={() => removeSkillTag(tag)}
+                          className="ml-1 hover:text-destructive"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </FormControl>
+              <FormDescription>
+                Add relevant tags to help others find your skill (e.g., "Python", "Graphic Design")
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="tradePreferences"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Trade Preferences</FormLabel>
+              <FormControl>
+                <div className="space-y-2">
+                  <Input
+                    placeholder="What skills are you looking for? (press Enter)"
+                    value={newTradePreference}
+                    onChange={(e) => setNewTradePreference(e.target.value)}
+                    onKeyDown={addTradePreference}
+                    disabled={loading}
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    {field.value?.map((pref) => (
+                      <Badge key={pref} variant="outline" className="gap-1">
+                        {pref}
+                        <button
+                          type="button"
+                          onClick={() => removeTradePreference(pref)}
+                          className="ml-1 hover:text-destructive"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </FormControl>
+              <FormDescription>
+                List skills you'd like to learn in exchange
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="grid grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Location</FormLabel>
+                <FormControl>
+                  <Input 
+                    placeholder="Where are you located?" 
+                    {...field} 
+                    disabled={loading} 
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="contact"
@@ -190,7 +383,11 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
               <FormItem>
                 <FormLabel>Contact Information</FormLabel>
                 <FormControl>
-                  <Input placeholder="How can people reach you?" {...field} disabled={loading} />
+                  <Input 
+                    placeholder="How can people reach you?" 
+                    {...field} 
+                    disabled={loading} 
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -199,7 +396,7 @@ export function PostItemForm({ onSuccess, initialData }: PostItemFormProps) {
         </div>
 
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? (initialData ? "Updating..." : "Posting...") : (initialData ? "Update Listing" : "Post Listing")}
+          {loading ? (initialData ? "Updating..." : "Posting...") : (initialData ? "Update Trade" : "Post Trade")}
         </Button>
       </form>
     </Form>
