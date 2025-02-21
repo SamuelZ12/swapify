@@ -34,4 +34,4 @@ export default async function ResetPassword(props: {
       <FormMessage message={searchParams} />
     </form>
   );
-}
+} 

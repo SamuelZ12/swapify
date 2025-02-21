@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { MarketplaceItemsGrid } from "@/components/marketplace-items-grid";
 import { redirect } from "next/navigation";
 
-export default async function ProtectedPage() {
+export default async function DashboardPage() {
   const supabase = await createClient();
 
   const {
@@ -16,9 +16,9 @@ export default async function ProtectedPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center">
-        <h1 className="text-3xl font-bold tracking-tight">Marketplace</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
       </div>
       <MarketplaceItemsGrid />
     </div>
   );
-}
+} 
