@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export const HeroSection = () => {
   const { theme } = useTheme();
@@ -22,7 +23,14 @@ export const HeroSection = () => {
           <div className="max-w-screen-md mx-auto text-center text-4xl md:text-6xl font-bold">
             <h1>
               Trade Skills,
-              <span className="text-transparent px-2 bg-gradient-to-r from-[#F1B4A9] to-primary bg-clip-text">
+              <span
+                className={cn(
+                  "text-transparent px-2 bg-gradient-to-r bg-clip-text",
+                  theme === "dark"
+                    ? "from-[#E2725B] to-primary"
+                    : "from-[#F1B4A9] to-primary"
+                )}
+              >
                 Not Money
               </span>
             </h1>
