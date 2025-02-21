@@ -40,12 +40,34 @@ export const signInAction = async (formData: FormData) => {
   const password = formData.get("password") as string;
   const supabase = await createClient();
 
+  if (!email || !password) {
+    return encodedRedirect(
+      "error",
+      "/sign-in",
+      "Please enter both email and password"
+    );
+  }
+
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
+    if (error.message === "Invalid login credentials") {
+      return encodedRedirect(
+        "error",
+        "/sign-in",
+        "Invalid email or password. Please try again."
+      );
+    }
+    if (error.message.includes("Email not confirmed")) {
+      return encodedRedirect(
+        "error",
+        "/sign-in",
+        "Please verify your email address before signing in."
+      );
+    }
     return encodedRedirect("error", "/sign-in", error.message);
   }
 
