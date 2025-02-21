@@ -18,8 +18,8 @@ export function DashboardNavbar() {
         <div className="flex flex-1 items-center justify-end space-x-4">
           <ToggleTheme />
           <form action={signOutAction}>
-            <Button variant="outline" size="sm" type="submit">
-              <LogOut className="mr-2 h-4 w-4" />
+            <Button variant="outline" size="sm" type="submit" className="gap-2">
+              <LogOut className="h-4 w-4" />
               Sign out
             </Button>
           </form>

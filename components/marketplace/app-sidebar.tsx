@@ -49,8 +49,8 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
+import { signOutAction } from "@/app/actions"
 
 // This is sample data.
 const data = {
@@ -226,7 +226,7 @@ export function AppSidebar() {
               <span className="text-sm font-medium">John Doe</span>
               <BadgeCheck className="h-4 w-4 text-primary" />
             </div>
-            <span className="text-xs text-muted-foreground truncate">@johndoe.waterloo</span>
+            <span className="text-xs text-muted-foreground truncate">johndoe@uwaterloo.ca</span>
           </div>
         </div>
         <div className="px-2 pb-4">
@@ -331,10 +331,12 @@ export function AppSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <Button variant="ghost" className="w-full justify-start">
-                <LogOut className="h-4 w-4" />
-                <span>Sign Out</span>
-              </Button>
+              <form action={signOutAction} className="w-full">
+                <button type="submit" className="flex w-full items-center">
+                  <LogOut className="h-4 w-4" />
+                  <span className="ml-2">Sign Out</span>
+                </button>
+              </form>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

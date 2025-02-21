@@ -29,6 +29,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { signOutAction } from "@/app/actions";
+import { Button } from "@/components/ui/button";
 
 export function NavUser({
   user,
@@ -102,9 +104,13 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
+            <DropdownMenuItem asChild>
+              <form action={signOutAction} className="w-full">
+                <Button variant="ghost" className="w-full justify-start gap-2">
+                  <LogOut className="h-4 w-4" />
+                  Log out
+                </Button>
+              </form>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
