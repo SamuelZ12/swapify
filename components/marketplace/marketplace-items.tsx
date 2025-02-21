@@ -49,7 +49,7 @@ export function MarketplaceItems() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
-  const [conditionFilter, setConditionFilter] = useState<string>("all");
+  const [skillLevelFilter, setSkillLevelFilter] = useState<string>("all");
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [selectedItem, setSelectedItem] = useState<MarketplaceItem | null>(null);
@@ -105,12 +105,12 @@ export function MarketplaceItems() {
     const matchesSearch =
       item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (item.location?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
+      item.skillTags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesCategory = categoryFilter === "all" || item.category === categoryFilter;
-    const matchesCondition = conditionFilter === "all" || item.condition === conditionFilter;
+    const matchesSkillLevel = skillLevelFilter === "all" || item.skillLevel === skillLevelFilter;
 
-    return matchesSearch && matchesCategory && matchesCondition;
+    return matchesSearch && matchesCategory && matchesSkillLevel;
   });
 
   if (loading) {
@@ -133,22 +133,22 @@ export function MarketplaceItems() {
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                <SelectItem value="Item">Item</SelectItem>
-                <SelectItem value="Skill">Skill</SelectItem>
+                <SelectItem value="all">Categories</SelectItem>
+                <SelectItem value="Academic">Academic</SelectItem>
+                <SelectItem value="Creative">Creative</SelectItem>
+                <SelectItem value="Fitness">Fitness</SelectItem>
                 <SelectItem value="Other">Other</SelectItem>
               </SelectContent>
             </Select>
-            <Select value={conditionFilter} onValueChange={setConditionFilter}>
+            <Select value={skillLevelFilter} onValueChange={setSkillLevelFilter}>
               <SelectTrigger className="w-[120px]">
-                <SelectValue placeholder="Condition" />
+                <SelectValue placeholder="Skill Level" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Conditions</SelectItem>
-                <SelectItem value="New">New</SelectItem>
-                <SelectItem value="Like New">Like New</SelectItem>
-                <SelectItem value="Good">Good</SelectItem>
-                <SelectItem value="Fair">Fair</SelectItem>
+                <SelectItem value="all">Levels</SelectItem>
+                <SelectItem value="Beginner">Beginner</SelectItem>
+                <SelectItem value="Intermediate">Intermediate</SelectItem>
+                <SelectItem value="Advanced">Advanced</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -250,9 +250,6 @@ export function MarketplaceItems() {
                   <p className="text-sm text-muted-foreground line-clamp-2">
                     {item.description}
                   </p>
-                  {item.price && (
-                    <p className="font-medium">{item.price}</p>
-                  )}
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="secondary" className="w-full mt-4" size="sm">
@@ -297,9 +294,8 @@ export function MarketplaceItems() {
             <TableHeader>
               <TableRow>
                 <TableHead className={COLUMN_WIDTHS.TITLE}>Title</TableHead>
-                <TableHead className={COLUMN_WIDTHS.PRICE}>Price</TableHead>
                 <TableHead className={COLUMN_WIDTHS.CATEGORY}>Category</TableHead>
-                <TableHead className={COLUMN_WIDTHS.CONDITION}>Condition</TableHead>
+                <TableHead className={COLUMN_WIDTHS.CONDITION}>Skill Level</TableHead>
                 <TableHead className={COLUMN_WIDTHS.LOCATION}>Location</TableHead>
                 <TableHead className={COLUMN_WIDTHS.CONTACT}>Contact</TableHead>
                 <TableHead className={COLUMN_WIDTHS.CREATED_AT}>Posted On</TableHead>
@@ -320,9 +316,8 @@ export function MarketplaceItems() {
                       {item.title}
                       <p className="text-sm text-muted-foreground truncate">{item.description}</p>
                     </TableCell>
-                    <TableCell className={COLUMN_WIDTHS.PRICE}>{item.price}</TableCell>
                     <TableCell className={COLUMN_WIDTHS.CATEGORY}>{item.category}</TableCell>
-                    <TableCell className={COLUMN_WIDTHS.CONDITION}>{item.condition}</TableCell>
+                    <TableCell className={COLUMN_WIDTHS.CONDITION}>{item.skillLevel}</TableCell>
                     <TableCell className={COLUMN_WIDTHS.LOCATION}>{item.location}</TableCell>
                     <TableCell className={COLUMN_WIDTHS.CONTACT}>{item.contact}</TableCell>
                     <TableCell className={COLUMN_WIDTHS.CREATED_AT}>
