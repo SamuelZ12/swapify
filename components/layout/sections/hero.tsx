@@ -83,7 +83,7 @@ export const HeroSection = () => {
               alt="dashboard"
               priority
             />
-            {theme === 'dark' && (
+            {mounted && theme === 'dark' && (
               <Image
                 width={1200}
                 height={1200}
