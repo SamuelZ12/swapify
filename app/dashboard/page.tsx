@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import { MarketplaceItemsGrid } from "@/components/marketplace-items-grid";
+import { MarketplaceItemsGrid } from "@/components/marketplace/marketplace-items-grid";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {

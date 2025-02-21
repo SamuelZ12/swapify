@@ -1,9 +1,9 @@
-import { signUpAction } from "@/app/actions";
-import { FormMessage, Message } from "@/components/form-message";
-import { SubmitButton } from "@/components/submit-button";
+import { signInAction } from "@/app/actions";
+import { FormMessage, Message } from "@/components/forms/form-message";
+import { SubmitButton } from "@/components/forms/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GoogleSignInButton } from "@/components/google-sign-in-button";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -75,7 +75,7 @@ export default async function Signup(props: {
               <SubmitButton
                 className="w-full h-11 text-base"
                 pendingText="Creating account..."
-                formAction={signUpAction}
+                formAction={signInAction}
               >
                 Create account
               </SubmitButton>

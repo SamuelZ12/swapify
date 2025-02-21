@@ -13,7 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { PostItemForm } from "@/components/post-item-form";
+import { PostItemForm } from "@/components/forms/post-item-form";
 import { Separator } from "@/components/ui/separator";
 
 type MarketplaceItem = {

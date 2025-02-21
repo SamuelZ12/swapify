@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { createClient } from "@/utils/supabase/client";
-import { ImageUpload } from "@/components/image-upload";
+import { ImageUpload } from "@/components/forms/image-upload";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
