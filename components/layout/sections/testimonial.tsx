@@ -14,65 +14,72 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Badge } from "@/components/ui/badge";
 import { Star } from "lucide-react";
 
 interface ReviewProps {
   image: string;
   name: string;
-  userName: string;
+  program: string;
   comment: string;
   rating: number;
+  skillsTraded: string[];
 }
 
 const reviewList: ReviewProps[] = [
   {
-    image: "https://github.com/shadcn.png",
-    name: "John Doe",
-    userName: "Product Manager",
+    image: "/avatars/sarah.jpg",
+    name: "Sarah Chen",
+    program: "3B Computer Science",
     comment:
-      "Wow NextJs + Shadcn is awesome!. This template lets me change colors, fonts and images to match my brand identity. ",
+      "I traded Python tutoring for UI/UX design lessons. Not only did I improve my design skills, but I also made a great friend who's now my hackathon partner!",
     rating: 5.0,
+    skillsTraded: ["Python", "UI/UX Design"],
   },
   {
-    image: "https://github.com/shadcn.png",
-    name: "Sophia Collins",
-    userName: "Cybersecurity Analyst",
+    image: "/avatars/mike.jpg",
+    name: "Mike Patel",
+    program: "4A Systems Design",
     comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna. ",
+      "Found a study group for my algorithms course and traded my React knowledge for help with dynamic programming. Swapify made exam prep so much easier!",
+    rating: 4.9,
+    skillsTraded: ["React", "Algorithms"],
+  },
+  {
+    image: "/avatars/emma.jpg",
+    name: "Emma Wilson",
+    program: "2B Arts & Business",
+    comment:
+      "As an arts student learning to code, I traded my digital marketing expertise for web development mentorship. Now I'm building my own portfolio website!",
+    rating: 5.0,
+    skillsTraded: ["Marketing", "Web Dev"],
+  },
+  {
+    image: "/avatars/david.jpg",
+    name: "David Kim",
+    program: "3A Mechatronics",
+    comment:
+      "Traded CAD modeling help for guitar lessons. It's amazing how many talented musicians we have at UW! Now I can code and play music during my study breaks.",
     rating: 4.8,
-  },
-
-  {
-    image: "https://github.com/shadcn.png",
-    name: "Adam Johnson",
-    userName: "Chief Technology Officer",
-    comment:
-      "Lorem ipsum dolor sit amet,exercitation. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-    rating: 4.9,
+    skillsTraded: ["CAD", "Music"],
   },
   {
-    image: "https://github.com/shadcn.png",
-    name: "Ethan Parker",
-    userName: "Data Scientist",
+    image: "/avatars/priya.jpg",
+    name: "Priya Sharma",
+    program: "4B Mathematics",
     comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod labore et dolore magna aliqua. Ut enim ad minim veniam.",
+      "Used Swapify to find a language exchange partner. I helped with calculus while learning Mandarin! Perfect for both academic and personal growth.",
     rating: 5.0,
+    skillsTraded: ["Math", "Languages"],
   },
   {
-    image: "https://github.com/shadcn.png",
-    name: "Ava Mitchell",
-    userName: "IT Project Manager",
+    image: "/avatars/alex.jpg",
+    name: "Alex Thompson",
+    program: "2A Environmental Studies",
     comment:
-      "Lorem ipsum dolor sit amet, tempor incididunt  aliqua. Ut enim ad minim veniam, quis nostrud incididunt consectetur adipiscing elit.",
-    rating: 5.0,
-  },
-  {
-    image: "https://github.com/shadcn.png",
-    name: "Isabella Reed",
-    userName: "DevOps Engineer",
-    comment:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Connected with a CS student who needed help with sustainability research. I got Python automation skills, and they got expert insights for their project!",
     rating: 4.9,
+    skillsTraded: ["Research", "Python"],
   },
 ];
 
@@ -85,7 +92,7 @@ export const TestimonialSection = () => {
         </h2>
 
         <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">
-          Hear What Our 1000+ Clients Say
+          From Students Like You
         </h2>
       </div>
 
@@ -102,30 +109,37 @@ export const TestimonialSection = () => {
               className="md:basis-1/2 lg:basis-1/3"
             >
               <Card className="bg-muted/50 dark:bg-card">
-                <CardContent className="pt-6 pb-0">
-                  <div className="flex gap-1 pb-6">
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
-                    <Star className="size-4 fill-primary text-primary" />
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-2 pb-4">
+                    <div className="flex gap-1">
+                      {[...Array(Math.floor(review.rating))].map((_, i) => (
+                        <Star key={i} className="size-4 fill-primary text-primary" />
+                      ))}
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {review.rating.toFixed(1)}
+                    </span>
                   </div>
-                  {`"${review.comment}"`}
+                  <div className="flex gap-2 flex-wrap mb-4">
+                    {review.skillsTraded.map((skill) => (
+                      <Badge key={skill} variant="secondary" className="text-xs">
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
+                  <p className="text-muted-foreground italic">"{review.comment}"</p>
                 </CardContent>
 
                 <CardHeader>
                   <div className="flex flex-row items-center gap-4">
                     <Avatar>
-                      <AvatarImage
-                        src="https://avatars.githubusercontent.com/u/75042455?v=4"
-                        alt="radix"
-                      />
-                      <AvatarFallback>SV</AvatarFallback>
+                      <AvatarImage src={review.image} alt={review.name} />
+                      <AvatarFallback>{review.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                     </Avatar>
 
                     <div className="flex flex-col">
                       <CardTitle className="text-lg">{review.name}</CardTitle>
-                      <CardDescription>{review.userName}</CardDescription>
+                      <CardDescription>{review.program}</CardDescription>
                     </div>
                   </div>
                 </CardHeader>

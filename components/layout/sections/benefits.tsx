@@ -10,28 +10,28 @@ interface BenefitsProps {
 
 const benefitList: BenefitsProps[] = [
   {
-    icon: "Blocks",
-    title: "Build Brand Trust",
+    icon: "GraduationCap",
+    title: "Learn New Skills",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur dolores.",
+      "Access peer-to-peer tutoring and skill workshops. Learn from experienced students in programming, design, music, and more.",
   },
   {
-    icon: "LineChart",
-    title: "More Leads",
+    icon: "PiggyBank",
+    title: "Save Money",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam, natus consectetur.",
+      "Trade your skills instead of spending money. Perfect for budget-conscious students looking to learn and grow without financial strain.",
   },
   {
-    icon: "Wallet",
-    title: "Higher Conversions",
+    icon: "Users",
+    title: "Build Connections",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus consectetur. A odio velit cum aliquam",
+      "Network with fellow students across faculties. Form study groups, find project partners, and make friends with shared interests.",
   },
   {
-    icon: "Sparkle",
-    title: "Test Marketing Ideas",
+    icon: "Trophy",
+    title: "Gain Experience",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur dolores.",
+      "Build your portfolio by helping others. Get real-world experience and references for your resume while studying.",
   },
 ];
 
@@ -43,12 +43,12 @@ export const BenefitsSection = () => {
           <h2 className="text-lg text-primary mb-2 tracking-wider">Benefits</h2>
 
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Your Shortcut to Success
+            Unlock Your Potential Through Skill Trading
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Non
-            ducimus reprehenderit architecto rerum similique facere odit
-            deleniti necessitatibus quo quae.
+            As a UW student, you have valuable skills to share. Join Swapify to trade
+            your expertise, learn from peers, and build meaningful connections - all
+            while saving money.
           </p>
         </div>
 
