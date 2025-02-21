@@ -14,7 +14,10 @@ export default async function ProtectedPage() {
   }
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-8">
+    <div className="space-y-8">
+      <div className="flex items-center">
+        <h1 className="text-3xl font-bold tracking-tight">Marketplace</h1>
+      </div>
       <MarketplaceItemsGrid />
     </div>
   );

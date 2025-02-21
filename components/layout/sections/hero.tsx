@@ -57,18 +57,26 @@ export const HeroSection = () => {
 
         <div className="relative group mt-14">
           <div className="absolute top-2 lg:-top-8 left-1/2 transform -translate-x-1/2 w-[90%] mx-auto h-24 lg:h-80 bg-primary/50 rounded-full blur-3xl"></div>
-          <Image
-            width={1200}
-            height={1200}
-            className="w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none flex items-center border border-t-2 border-secondary  border-t-primary/30"
-            src={
-              theme === "light"
-                ? "/hero-image-light.jpeg"
-                : "/hero-image-dark.jpeg"
-            }
-            alt="dashboard"
-          />
-
+          <div className="relative">
+            <Image
+              width={1200}
+              height={1200}
+              className="w-full md:w-[1200px] mx-auto rounded-lg relative rouded-lg leading-none flex items-center border border-t-2 border-secondary border-t-primary/30"
+              src="/hero-image-light.jpeg"
+              alt="dashboard"
+              priority
+            />
+            {theme === 'dark' && (
+              <Image
+                width={1200}
+                height={1200}
+                className="w-full md:w-[1200px] mx-auto rounded-lg absolute inset-0 transition-opacity duration-200"
+                src="/hero-image-dark.jpeg"
+                alt="dashboard"
+                priority
+              />
+            )}
+          </div>
           <div className="absolute bottom-0 left-0 w-full h-20 md:h-28 bg-gradient-to-b from-background/0 via-background/50 to-background rounded-lg"></div>
         </div>
       </div>
