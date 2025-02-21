@@ -11,7 +11,7 @@ export const FooterSection = () => {
             <Link href="#" className="flex font-bold items-center">
               <ChevronsDownIcon className="w-9 h-9 mr-2 bg-gradient-to-tr from-primary via-primary/70 to-primary rounded-lg border border-secondary" />
 
-              <h3 className="text-2xl">Shadcn</h3>
+              <h3 className="text-2xl">Swapify</h3>
             </Link>
           </div>
 
@@ -103,14 +103,7 @@ export const FooterSection = () => {
         <Separator className="my-6" />
         <section className="">
           <h3 className="">
-            &copy; 2025 Designed and developed by
-            <Link
-              target="_blank"
-              href="https://github.com/SamuelZ12/swapify"
-              className="text-primary transition-all border-primary hover:border-b-2 ml-1"
-            >
-              Samuel Zhang & Nina Zhang
-            </Link>
+            &copy; © 2025 Swapify - All rights reserved.
           </h3>
         </section>
       </div>
