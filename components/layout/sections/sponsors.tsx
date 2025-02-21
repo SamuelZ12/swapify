@@ -15,7 +15,7 @@ const sponsors: sponsorsProps[] = [
     name: "UW Engineering Society",
   },
   {
-    icon: "Code2",
+    icon: "Code",
     name: "Waterloo Blockchain",
   },
   {
@@ -27,7 +27,7 @@ const sponsors: sponsorsProps[] = [
     name: "WUSA",
   },
   {
-    icon: "Laptop2",
+    icon: "Laptop",
     name: "Computer Science Club",
   },
   {
@@ -35,7 +35,7 @@ const sponsors: sponsorsProps[] = [
     name: "UW Design Club",
   },
   {
-    icon: "Building2",
+    icon: "Building",
     name: "Conrad School",
   },
 ];
