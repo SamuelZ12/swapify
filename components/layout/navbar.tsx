@@ -61,7 +61,12 @@ export const Navbar = () => {
         Swapify
       </Link>
       {/* <!-- Mobile --> */}
-      <div className="flex items-center lg:hidden">
+      <div className="flex items-center gap-2 lg:hidden">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/sign-in" className="text-sm font-medium">
+            Sign in
+          </Link>
+        </Button>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Menu
@@ -99,8 +104,16 @@ export const Navbar = () => {
               </div>
             </div>
 
-            <SheetFooter className="flex-col sm:flex-col justify-start items-start">
+            <SheetFooter className="flex-col sm:flex-col justify-start items-start gap-4">
               <Separator className="mb-2" />
+              <div className="flex flex-col w-full gap-2">
+                <Button variant="outline" className="w-full" asChild>
+                  <Link href="/sign-in">Sign in</Link>
+                </Button>
+                <Button className="w-full" asChild>
+                  <Link href="/sign-up">Sign up</Link>
+                </Button>
+              </div>
               <ToggleTheme />
             </SheetFooter>
           </SheetContent>
@@ -125,7 +138,17 @@ export const Navbar = () => {
         </NavigationMenuList>
       </NavigationMenu>
 
-      <div className="hidden lg:flex items-center gap-2">
+      <div className="hidden lg:flex items-center gap-4">
+        <Button variant="ghost" size="sm" asChild>
+          <Link href="/sign-in" className="text-sm font-medium">
+            Sign in
+          </Link>
+        </Button>
+        <Button size="sm" asChild>
+          <Link href="/sign-up" className="text-sm font-medium">
+            Sign up
+          </Link>
+        </Button>
         <ToggleTheme />
       </div>
     </header>
