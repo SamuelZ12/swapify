@@ -49,24 +49,11 @@ export const HeroSection = () => {
             {`Swapify connects University of Waterloo students to exchange skills, services, and resources. Learn Python, trade design skills, or find study partners - all without spending a dime.`}
           </p>
 
-          <div className="space-y-4 md:space-y-0 md:space-x-4">
+          <div className="space-y-4 md:space-y-0">
             <Button asChild className="w-5/6 md:w-1/4 font-bold group/arrow">
               <Link href="/sign-up">
                 Get Started
                 <ArrowRight className="size-5 ml-2 group-hover/arrow:translate-x-1 transition-transform" />
-              </Link>
-            </Button>
-
-            <Button
-              asChild
-              variant="secondary"
-              className="w-5/6 md:w-1/4 font-bold"
-            >
-              <Link
-                href="https://github.com/SamuelZ12/swapify/"
-                target="_blank"
-              >
-                Github respository
               </Link>
             </Button>
           </div>

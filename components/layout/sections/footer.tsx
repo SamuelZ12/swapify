@@ -103,7 +103,7 @@ export const FooterSection = () => {
         <Separator className="my-6" />
         <section className="">
           <h3 className="">
-            &copy; © 2025 Swapify - All rights reserved.
+            © 2025 Swapify - All rights reserved.
           </h3>
         </section>
       </div>
