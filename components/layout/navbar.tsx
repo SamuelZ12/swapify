@@ -102,11 +102,8 @@ export const Navbar = () => {
             <SheetFooter className="flex-col sm:flex-col justify-start items-start gap-4">
               <Separator className="mb-2" />
               <div className="flex flex-col w-full gap-2">
-                <Button variant="outline" className="w-full" asChild>
-                  <Link href="/sign-in">Sign in</Link>
-                </Button>
                 <Button className="w-full" asChild>
-                  <Link href="/sign-up">Sign up</Link>
+                  <Link href="/sign-up">Get Started</Link>
                 </Button>
               </div>
               <ToggleTheme />
@@ -134,14 +131,9 @@ export const Navbar = () => {
       </NavigationMenu>
 
       <div className="hidden lg:flex items-center gap-4">
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/sign-in" className="text-sm font-medium">
-            Sign in
-          </Link>
-        </Button>
         <Button size="sm" asChild>
           <Link href="/sign-up" className="text-sm font-medium">
-            Sign up
+            Get Started
           </Link>
         </Button>
         <ToggleTheme />
