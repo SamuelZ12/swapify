@@ -150,3 +150,38 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return redirect("/sign-in");
 };
+
+export const joinWaitlistAction = async (formData: FormData) => {
+  const name = formData.get("name")?.toString();
+  const email = formData.get("email")?.toString();
+  const supabase = await createClient();
+
+  if (!name || !email) {
+    return { error: "Name and email are required" };
+  }
+
+  try {
+    const { error } = await supabase
+      .from("waitlist")
+      .insert([
+        { 
+          name,
+          email,
+          created_at: new Date().toISOString()
+        }
+      ]);
+
+    if (error) {
+      if (error.code === "23505") { // Unique constraint violation
+        return { error: "This email is already on our waitlist." };
+      }
+      console.error("Error submitting to waitlist:", error);
+      return { error: "There was an error joining the waitlist. Please try again." };
+    }
+
+    return { success: "You've been added to our waitlist! We'll notify you when you're invited." };
+  } catch (error) {
+    console.error("Error submitting to waitlist:", error);
+    return { error: "There was an error joining the waitlist. Please try again." };
+  }
+};

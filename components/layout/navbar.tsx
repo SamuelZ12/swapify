@@ -103,7 +103,7 @@ export const Navbar = () => {
               <Separator className="mb-2" />
               <div className="flex flex-col w-full gap-2">
                 <Button className="w-full" asChild>
-                  <Link href="/sign-up">Get Started</Link>
+                  <Link href="/join">Early Access</Link>
                 </Button>
               </div>
               <ToggleTheme />
@@ -132,8 +132,8 @@ export const Navbar = () => {
 
       <div className="hidden lg:flex items-center gap-4">
         <Button size="sm" asChild>
-          <Link href="/sign-up" className="text-sm font-medium">
-            Get Started
+          <Link href="/join" className="text-sm font-medium">
+            Early Access
           </Link>
         </Button>
         <ToggleTheme />
